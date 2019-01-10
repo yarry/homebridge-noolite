@@ -39,6 +39,7 @@ class NooLitePlatform {
 
     log("NooLitePlatform v.", pjson.version);
     this.pjson = pjson;
+    this.log = log
     let platform = this;
 
     // Get settings from config
@@ -59,7 +60,6 @@ class NooLitePlatform {
     this.Characteristic = Characteristic;
     this.UUIDGen = UUIDGen;
 
-    this.log = log;
     this.accessories = [];
     this.uiSessions = {};
 
@@ -118,6 +118,8 @@ class NooLitePlatform {
     serialPort.tryToOpenPort();
 
     serialPort.nlParser = serialPort.pipe(new ByteLength({length: 17}));
+
+    serialPort.nlParser.setMaxListeners(100)
 
     serialPort.nlParser.on('data', function(data) {
         let nlReaponse = new NooLiteResponse(...data);
