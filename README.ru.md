@@ -4,28 +4,37 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 
 Другие языки: [English](https://github.com/AlekseevAV/homebridge-noolite/blob/master/README.md)
 
+ТГ канал: https://t.me/Noolite (tg://t.me/Noolite)
+
 ## QuickStart
 
 1. Установить [homebridge](https://github.com/nfarina/homebridge)
-2. Установить homebridge-noolite плагин 
+2. Установить homebridge-noolite плагин
 
         $  sudo npm install -g --unsafe-perm homebridge-noolite
-   
+
 3. Добавить необходимые настройки homebridge в config.json
 
         ...
         "platforms": [
             {
               "platform": "NooLitePlatform",
-              "serialPort": "/dev/tty.usbserial-AL032Z5U"
+              "serialPort": "/dev/tty.usbserial-AL032Z5U",
+              "serverPort": "8080",
+              "periodicAccessoryUpdate": 5
             }
           ]
         ...
- 
-    `serialPort` - путь до последовательного порта MTRF адапетра. Смотри файл `sampleConfig.json` для примера.
+
+    * `serialPort` - путь до последовательного порта MTRF адапетра _обязательный_
+    * `serverPort` - порт веб-сервера, для привязки noolite устройств _опциональный, по умолчанию 8080_
+    * `periodicAccessoryUpdate` - переодически обновляет статус NooLite-F устройств (в секундах) _опциональный, по умолчанию эта функция отключена_
+
+    Смотри файл `sampleConfig.json` для примера.
 
 4. Выдать права для доступа к адаптеру
 `sudo usermod -a -G dialout `
+
 5. Запустить homebridge
 
 ## Описание
@@ -37,7 +46,7 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 
 На странице аксессуаров (`/acc`) доступно 2 раздела:
 
-1. MTRF - взаимодействие с MTRF адапеторм и привязанными NooLite-F устройствами по каналам (0-63) 
+1. MTRF - взаимодействие с MTRF адапеторм и привязанными NooLite-F устройствами по каналам (0-63)
 2. HomeKit - взаимодействие с HomeKit аксессуарами: список/создание/удаление
 
 ## Поддерживаемые NooLite устройства
@@ -49,6 +58,7 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 4. [SB](https://www.noo.com.by/silovoj-blok-sb111-150.html) блок
 5. [SR](https://www.noo.com.by/silovoj-blok-sr211-2k0.html) блок
 6. [SD](https://www.noo.com.by/silovoj-blok-SD111-180.html) RGB контроллер
+7. [SRF-R](https://www.noo.com.by/silovoj-blok-srf-1-1000-r.html) блок для электроприводов роллет, рулонных штор, жалюзи, ворот и т.д.
 
 #### Датчики:
 1. Motion sensor [PM112](https://www.noo.com.by/pm112-sensor.html)
@@ -63,5 +73,4 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 
 ### TODO:
 1. Конфигурирование SLF блока
-2. [SRF](https://www.noo.com.by/srf-10-1000.html) блоки
-3. UI/UX улучшения web интерфейса
+2. UI/UX улучшения web интерфейса
