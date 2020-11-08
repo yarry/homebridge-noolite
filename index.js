@@ -53,7 +53,7 @@ class NooLitePlatform {
     this.server = server(this);
 
     // Serial port
-    this.serialPort =  this.gerSerial(serialPort);
+    this.serialPort =  this.gerSerial(serialPort, config);
 
     // Homebridge
     this.Accessory = Accessory;
@@ -83,7 +83,7 @@ class NooLitePlatform {
 
   }
 
-  gerSerial(serialPortPath) {
+  gerSerial(serialPortPath, config) {
     let platform = this;
 
     let serialPort = new SerialPort(serialPortPath, { autoOpen: false });
@@ -146,7 +146,7 @@ class NooLitePlatform {
       this.tryToOpenPort()
     })
 
-    serialPort.mtrfSerial = new MTRFSerial(platform, serialPort);
+    serialPort.mtrfSerial = new MTRFSerial(platform, serialPort, config['requestTtl'], config['serialWriteDelayMs']);
 
     return serialPort;
   }

@@ -21,7 +21,9 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
               "platform": "NooLitePlatform",
               "serialPort": "/dev/tty.usbserial-AL032Z5U",
               "serverPort": "8080",
-              "periodicAccessoryUpdate": 5
+              "periodicAccessoryUpdate": 5,
+              "requestTtl": 1000,
+              "serialWriteDelayMs": 250
             }
           ]
         ...
@@ -29,6 +31,8 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
     * `serialPort` - путь до последовательного порта MTRF адапетра _обязательный_
     * `serverPort` - порт веб-сервера, для привязки noolite устройств _опциональный, по умолчанию 8080_
     * `periodicAccessoryUpdate` - переодически обновляет статус NooLite-F устройств (в секундах) _опциональный, по умолчанию эта функция отключена_
+    * `requestTtl` - время ожидания ответа от блока в миллисекундах
+    * `serialWriteDelayMs` - задержка между отправками команд на блоки в миллисекунда (при слишком маленьком времени MTRF адаптер может не успевать обрабатывать запросы/ответы к блокам)
 
     Смотри файл `sampleConfig.json` для примера.
 
@@ -59,6 +63,7 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 5. [SR](https://www.noo.com.by/silovoj-blok-sr211-2k0.html) блок
 6. [SD](https://www.noo.com.by/silovoj-blok-SD111-180.html) RGB контроллер
 7. [SRF-R](https://www.noo.com.by/silovoj-blok-srf-1-1000-r.html) блок для электроприводов роллет, рулонных штор, жалюзи, ворот и т.д.
+8. [SRF-1-3000-T](https://www.noo.com.by/silovoj-blok-srf-1-3000-t.html) блок для управления электрическими системами обогрева
 
 #### Датчики:
 1. Motion sensor [PM112](https://www.noo.com.by/pm112-sensor.html)
@@ -69,7 +74,7 @@ NooLite плагин (для [USB MTRF-64](https://www.noo.com.by/mtrf-64-usb.ht
 
 #### Специфические аксессуары:
 1. Акссессуар ворота - сделан на базе SLF блока, отсылает команду 8 (включает нагрузку на 1.5 секунды) по событиям Открыть/Закрыть.
-   По умолчанию установлен интервал в 20 секунд на полное открытие/закрытие двери.
+   По умолчанию установлен интервал в 1 секунду на полное открытие/закрытие двери.
 
 ### TODO:
 1. Конфигурирование SLF блока

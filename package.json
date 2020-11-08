@@ -1,6 +1,6 @@
 {
   "name": "homebridge-noolite",
-  "version": "0.3.1",
+  "version": "0.4.3",
   "description": "NooLite plugin for Homebridge",
   "keywords": [
     "homebridge-plugin",
@@ -24,7 +24,7 @@
     "body-parser": "latest",
     "express": "^4.16.2",
     "nunjucks": "^3.1.0",
-    "serialport": "^8.0.5",
+    "serialport": "^8.0.7",
     "sse-node": "^1.0.2"
   }
 }
