@@ -17,11 +17,13 @@ class Slf extends AccessoryBase {
   createPeriodicTasks() {
     super.initOrCreateServices();
     if (this.platform.periodicAccessoryUpdate) {
-      setInterval(() => {
-        this.log('send periodically update command');
-        let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
-        this.platform.sendCommand(command, (err, nlRes) => {})
-      }, this.platform.periodicAccessoryUpdate * 1000);
+      setTimeout(() => {
+        setInterval(() => {
+          this.log('send periodically update command');
+          let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
+          this.platform.sendCommand(command, (err, nlRes) => {})
+        }, this.platform.periodicAccessoryUpdate * 1000);
+      }, this.platform.periodicAccessoryUpdate * 1000 * Math.random());
     }
   }
 
