@@ -98,6 +98,11 @@ class Slf extends AccessoryBase {
   setOnState(value, callback) {
     this.log("Set On characteristic to " + value);
 
+    if(this.cachedState == value) {
+      callback();
+      return;
+    }
+
     let command = new NooLiteRequest(this.nlChannel, (value ? 2 : 0), 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
 
     this.platform.sendCommand(command, (err, nlRes) => {
