@@ -3,6 +3,9 @@ const AccessoryBase = require('./AccessoryBase');
 
 
 class Slf extends AccessoryBase {
+
+  cachedState = null;
+
   static displayName() {
     return 'SLF/SRF';
   }
@@ -50,6 +53,8 @@ class Slf extends AccessoryBase {
 
         let onValue = nlCmd.d2 > 0;
 
+        this.cachedState = onValue;
+
         if (onCharacteristic.value !== onValue) {
             onCharacteristic.updateValue(onValue);
         }
@@ -60,6 +65,11 @@ class Slf extends AccessoryBase {
   getOnState(callback) {
     this.log("get value");
     let acc = this.accessory;
+
+    if(this.cachedState) {
+      callback(null, onValue);
+      return;
+    }
 
     let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
 
@@ -79,7 +89,7 @@ class Slf extends AccessoryBase {
       if (nlRes.isState() && nlRes.fmt === 0) {
         onValue = nlRes.d2 > 0;
       }
-
+      this.cachedState = onValue;
       callback(null, onValue);
     })
 
