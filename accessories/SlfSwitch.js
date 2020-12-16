@@ -3,6 +3,9 @@ const AccessoryBase = require('./AccessoryBase');
 
 
 class SlfSwitch extends AccessoryBase {
+
+  cachedState = null;
+
   static displayName() {
     return 'SLFSwitch';
   }
@@ -17,11 +20,13 @@ class SlfSwitch extends AccessoryBase {
   createPeriodicTasks() {
     super.initOrCreateServices();
     if (this.platform.periodicAccessoryUpdate) {
-      setInterval(() => {
-        this.log('send periodically update command');
-        let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
-        this.platform.sendCommand(command, (err, nlRes) => {})
-      }, this.platform.periodicAccessoryUpdate * 1000);
+      setTimeout(() => {
+        setInterval(() => {
+          this.log('send periodically update command');
+          let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
+          this.platform.sendCommand(command, (err, nlRes) => {})
+        }, this.platform.periodicAccessoryUpdate * 1000);
+      }, this.platform.periodicAccessoryUpdate * 1000 * Math.random());
     }
   }
 
@@ -48,6 +53,8 @@ class SlfSwitch extends AccessoryBase {
 
         let onValue = nlCmd.d2 > 0;
 
+        this.cachedState = onValue;
+
         if (onCharacteristic.value !== onValue) {
             onCharacteristic.updateValue(onValue);
         }
@@ -58,6 +65,11 @@ class SlfSwitch extends AccessoryBase {
   getOnState(callback) {
     this.log("get value");
     let acc = this.accessory;
+
+    if(this.cachedState) {
+      callback(null, onValue);
+      return;
+    }
 
     let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
 
@@ -74,6 +86,8 @@ class SlfSwitch extends AccessoryBase {
 
       let onValue = acc.value;
 
+      this.cachedState = onValue;
+
       if (nlRes.isState() && nlRes.fmt === 0) {
         onValue = nlRes.d2 > 0;
       }
@@ -85,6 +99,11 @@ class SlfSwitch extends AccessoryBase {
 
   setOnState(value, callback) {
     this.log("Set On characteristic to " + value);
+
+    if(this.cachedState == value) {
+      callback();
+      return;
+    }
 
     let command = new NooLiteRequest(this.nlChannel, (value ? 2 : 0), 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
 
