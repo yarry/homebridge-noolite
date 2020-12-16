@@ -115,7 +115,7 @@ class Slf extends AccessoryBase {
         callback(new Error('Error on response'));
         return;
       }
-
+      this.cachedState = value;
       callback();
     })
 
