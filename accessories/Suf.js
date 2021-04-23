@@ -80,14 +80,22 @@ class Suf extends AccessoryBase {
 
     let command = new NooLiteRequest(this.nlChannel, 128, 2, 0, 0, 0, 0, 0, 0, 0, ...this.nlId.split(':'));
 
+    if (this.platform.immediatelyResponse){
+      callback(null, acc.value);
+    }
+
     this.platform.sendCommand(command, (err, nlRes) => {
       if (err) {
         this.log('Error on write: ', err.message);
-        callback(new Error('Error on write'));
+        if (!this.platform.immediatelyResponse){
+          callback(new Error('Error on write'));
+        }
         return;
       } else if (nlRes.isError()) {
         this.log('Error on response: ', nlRes);
-        callback(new Error('Error on response'));
+        if (!this.platform.immediatelyResponse){
+          callback(new Error('Error on response'));
+        }
         return;
       }
 
@@ -97,7 +105,9 @@ class Suf extends AccessoryBase {
         onValue = nlRes.d2 > 0;
       }
 
-      callback(null, onValue);
+      if (!this.platform.immediatelyResponse){
+        callback(null, onValue);  
+      }
     })
 
   }
